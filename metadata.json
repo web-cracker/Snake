@@ -1,0 +1,5 @@
+{
+  "name": "Neon Snake & Synth",
+  "description": "A cyberpunk-themed Snake game featuring a procedural Web Audio API music player acting as AI-generated background tracks.",
+  "requestFramePermissions": []
+}

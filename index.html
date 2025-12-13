@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neon Snake & Synth</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              glitch: {
+                cyan: '#00ffff',
+                magenta: '#ff00ff',
+                yellow: '#ffff00',
+                black: '#050505',
+                gray: '#1a1a1a',
+                white: '#e0e0e0',
+              }
+            },
+            fontFamily: {
+              display: ['"Rubik Glitch"', 'cursive'],
+              mono: ['"VT323"', 'monospace'],
+            },
+            animation: {
+              'glitch-skew': 'glitch-skew 3s infinite linear alternate-reverse',
+              'fast-flash': 'flash 0.1s infinite',
+              'noise-bg': 'noise 0.5s steps(3) infinite',
+            },
+            keyframes: {
+              'glitch-skew': {
+                '0%': { transform: 'skew(0deg)' },
+                '20%': { transform: 'skew(-10deg)' },
+                '25%': { transform: 'skew(10deg)' },
+                '30%': { transform: 'skew(0deg)' },
+                '100%': { transform: 'skew(0deg)' },
+              },
+              'flash': {
+                '0%, 100%': { opacity: 1 },
+                '50%': { opacity: 0.8 },
+              },
+              'noise': {
+                '0%': { transform: 'translate(0,0)' },
+                '20%': { transform: 'translate(-2px, 2px)' },
+                '40%': { transform: 'translate(-2px, -2px)' },
+                '60%': { transform: 'translate(2px, 2px)' },
+                '80%': { transform: 'translate(2px, -2px)' },
+                '100%': { transform: 'translate(0,0)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Rubik+Glitch&family=VT323&display=swap');
+      
+      body {
+        background-color: #000;
+        color: #e0e0e0;
+        font-family: 'VT323', monospace;
+        overflow-x: hidden;
+      }
+
+      /* CRT Scanline Overlay */
+      .scanlines {
+        background: linear-gradient(
+          to bottom,
+          rgba(255,255,255,0),
+          rgba(255,255,255,0) 50%,
+          rgba(0,0,0,0.3) 50%,
+          rgba(0,0,0,0.3)
+        );
+        background-size: 100% 4px;
+        position: fixed;
+        top: 0; right: 0; bottom: 0; left: 0;
+        pointer-events: none;
+        z-index: 9999;
+      }
+      
+      .crt-flicker {
+        animation: flicker 0.15s infinite;
+        pointer-events: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,255,0,0.02);
+        z-index: 9998;
+      }
+
+      @keyframes flicker {
+        0% { opacity: 0.97; }
+        50% { opacity: 1; }
+        100% { opacity: 0.98; }
+      }
+
+      /* Glitch Text Effect Helpers */
+      .glitch-text {
+        position: relative;
+      }
+      .glitch-text::before,
+      .glitch-text::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #050505;
+      }
+      .glitch-text::before {
+        left: 2px;
+        text-shadow: -1px 0 #ff00ff;
+        clip: rect(24px, 550px, 90px, 0);
+        animation: glitch-anim-2 3s infinite linear alternate-reverse;
+      }
+      .glitch-text::after {
+        left: -2px;
+        text-shadow: -1px 0 #00ffff;
+        clip: rect(85px, 550px, 140px, 0);
+        animation: glitch-anim 2.5s infinite linear alternate-reverse;
+      }
+
+      @keyframes glitch-anim {
+        0% { clip: rect(11px, 9999px, 81px, 0); }
+        20% { clip: rect(87px, 9999px, 16px, 0); }
+        40% { clip: rect(21px, 9999px, 66px, 0); }
+        60% { clip: rect(55px, 9999px, 11px, 0); }
+        80% { clip: rect(27px, 9999px, 44px, 0); }
+        100% { clip: rect(96px, 9999px, 96px, 0); }
+      }
+      @keyframes glitch-anim-2 {
+        0% { clip: rect(65px, 9999px, 100px, 0); }
+        20% { clip: rect(15px, 9999px, 82px, 0); }
+        40% { clip: rect(32px, 9999px, 25px, 0); }
+        60% { clip: rect(91px, 9999px, 49px, 0); }
+        80% { clip: rect(9px, 9999px, 2px, 0); }
+        100% { clip: rect(62px, 9999px, 73px, 0); }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3"
+  }
+}
+</script>
+</head>
+  <body>
+    <div class="scanlines"></div>
+    <div class="crt-flicker"></div>
+    <div id="root"></div>
+  </body>
+</html>
